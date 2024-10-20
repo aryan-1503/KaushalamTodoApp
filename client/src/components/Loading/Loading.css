@@ -7,7 +7,7 @@
     display: inline-block;
     width: 3px;
     height: 16px;
-    background-color: #210d00;
+    background-color: #110801;
     border-radius: 10px;
     animation: scale-up4 1s linear infinite;
 }
@@ -24,7 +24,7 @@
 
 @keyframes scale-up4 {
     20% {
-        background-color: #d06c4d;
+        background-color: #c4c4c4;
         transform: scaleY(1.5);
     }
 

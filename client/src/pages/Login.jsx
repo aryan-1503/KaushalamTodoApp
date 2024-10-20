@@ -13,6 +13,8 @@ const Login = () => {
         password: '',
     });
 
+    const [loading,setLoading] = useState(false);
+
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -24,6 +26,7 @@ const Login = () => {
         e.preventDefault();
         console.log(formData);
         try{
+            setLoading(true);
             const res = await axios.post("http://localhost:4000/api/auth/login", formData, {
                 withCredentials: true
             })
@@ -37,6 +40,8 @@ const Login = () => {
 
         }catch (e) {
             console.log(e);
+        }finally {
+            setLoading(false)
         }
     };
 
@@ -64,7 +69,7 @@ const Login = () => {
                         className="w-full p-2 mb-4 border border-black rounded focus:outline-none focus:ring focus:ring-gray-800"
                     />
                     <button type="submit" className="w-full p-3 bg-black text-white rounded hover:bg-gray-800 transition duration-300">
-                        Login
+                        {loading ? <div style={{ display: "grid", placeItems: "center" }}><Loading /></div> : "Login"}
                     </button>
                     <ToastContainer />
                 </form>

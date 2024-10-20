@@ -39,7 +39,11 @@ function App() {
     }, []);
 
     if (loading){
-        return <Loading />
+        return (
+            <div className="h-screen w-screen flex items-center justify-center">
+                <Loading />
+            </div>
+        )
     }
 
   return (
