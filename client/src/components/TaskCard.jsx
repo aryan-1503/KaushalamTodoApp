@@ -49,7 +49,7 @@ const TaskCard = ({ id, title, priority, endDate, status }) => {
     };
 
     return (
-        <div className={`bg-white rounded-xl shadow-xl px-6 py-6 flex flex-col justify-between w-80 space-y-4 ${status === 'completed' && 'opacity-50'}`}>
+        <div className={`bg-white rounded-xl shadow-xl px-6 py-6 flex flex-col justify-between w-80 space-y-4 ${status === 'completed' && 'opacity-60 z-0'}`}>
             <div className="w-full flex justify-between items-center">
                 <h2 className="font-bold text-xl text-left">{title}</h2>
                 <div className={`py-1 px-3 rounded font-semibold ${priorityColor[priority]}`}>

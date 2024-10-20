@@ -51,18 +51,18 @@ const Home = () => {
                         {isOpen && (
                             <>
                                 <div
-                                    className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
+                                    className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-[500]"
                                     onClick={handleClose}
                                 ></div>
-                                <div className="fixed inset-0 flex justify-center items-center">
+                                <div className="fixed inset-0 flex justify-center items-center z-[999]">
                                     <AddTaskCard />
                                 </div>
                             </>
                         )}
                         {editOpen && (
                                 <>
-                                    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
-                                    <div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]">
+                                    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-[500]"></div>
+                                    <div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] z-[999]">
                                         <EditTaskCard {...selectedTask}/>
                                     </div>
                                 </>
