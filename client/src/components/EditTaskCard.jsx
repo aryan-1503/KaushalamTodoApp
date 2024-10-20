@@ -109,7 +109,7 @@ const EditTaskCard = ({ id, title, endDate, status, priority }) => {
                             className="w-5 h-5"
                         />
                         <label htmlFor="status" className="text-lg font-semibold">
-                            Done
+                            Task Completed
                         </label>
                     </div>
 
