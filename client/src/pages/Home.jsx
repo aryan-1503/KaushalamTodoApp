@@ -6,6 +6,7 @@ import TaskContext from "../context/TaskContext.jsx";
 import AddTaskCard from "../components/AddTaskCard.jsx";
 import EditTaskCard from "../components/EditTaskCard.jsx";
 import {api} from "../api/base.js";
+import Loading from "../components/Loading/Loading.jsx";
 
 const Home = () => {
     const { user } = useContext(AuthContext);
@@ -14,7 +15,7 @@ const Home = () => {
     const [tasks, setTasks] = useState([]);
     const [selectedTask, setSelectedTask] = useState({})
 
-
+    const [loading, setLoading] = useState(false)
 
     const handleOpen = () => {
         setIsOpen(true);
@@ -27,11 +28,14 @@ const Home = () => {
     useEffect(() => {
         const fetchAllTasks = async () => {
             try {
+                setLoading(true)
                 const res = await api.get('/task/all');
                 console.log(res.data)
                 setTasks(res.data.tasks)
             } catch (e) {
                 console.log(e);
+            }finally {
+                setLoading(false)
             }
         };
         fetchAllTasks();
@@ -63,7 +67,12 @@ const Home = () => {
                                     </div>
                                 </>
                         )}
-                        <AllTasks />
+                        {loading ? (
+                            <div className="h-screen w-screen flex items-center justify-center">
+                                <Loading />
+                            </div>
+                        ) : <AllTasks />}
+
                         <div className="fixed right-24 bottom-16 z-50">
                             <button
                                 onClick={handleOpen}
