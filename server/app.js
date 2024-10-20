@@ -10,7 +10,7 @@ console.log("KAUSHALAM TODO APP")
 
 const app = express();
 
-connectToDb()
+await connectToDb()
 
 // ENV variables
 const PORT = process.env.PORT

@@ -5,7 +5,7 @@ import nodemailer from "nodemailer"
 import axios from "axios";
 import {UserModel} from "../models/user.model.js";
 
-const userMail = process.env.MAIl_USER
+const userMail = process.env.MAIL_USER
 const userPassword = process.env.MAIL_PASS
 
 const transporter = nodemailer.createTransport({
@@ -71,17 +71,18 @@ const register = async (req, res) => {
             return res.status(400).json({message: "User Already Exists"})
         }
         const verificationCode = Math.floor(1000 + Math.random() * 9000).toString();
-        const newUser = new UserModel({ username,email,password,verificationCode});
-        const savedUser = await newUser.save();
-
         const mailOptions = {
-            from: process.env.MAIL_USER,
+            from: userMail,
             to: email,
             subject: `Kaushalam Verification Code`,
             text: `Welcome to Kaushalam! 🌟 Verify your email . Your verification code is: ${verificationCode}. Enjoy the journey! 📸✨`,
         };
 
         await transporter.sendMail(mailOptions);
+        const newUser = new UserModel({ username,email,password,verificationCode});
+        const savedUser = await newUser.save();
+
+
         return res.status(200).json({ message: "Verify your email", savedUser });
     }
     catch (error) {
