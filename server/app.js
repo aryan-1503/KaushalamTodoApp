@@ -17,7 +17,7 @@ const PORT = process.env.PORT
 
 // CORS
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: "https://kaushalam-todo-app.vercel.app",
     credentials: true,
 }));
 
