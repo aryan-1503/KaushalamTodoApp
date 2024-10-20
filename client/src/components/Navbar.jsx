@@ -46,7 +46,7 @@ const Navbar = () => {
     return (
         <>
             <ToastContainer />
-            <header className="w-screen flex justify-around items-center gap-[15rem] p-2 border rounded-b-2xl border-b-gray-100 border-b-lg shadow-2xl mxs:gap-7">
+            <header className="w-screen flex justify-around items-center gap-[15rem] p-2 border rounded-b border-b-gray-100 border-b-lg shadow-xl mxs:gap-7">
                 <Link to="/" className="flex justify-center font-bold items-center gap-3 tracking-wide text-[30px]">
                     Kaushalam
                 </Link>
