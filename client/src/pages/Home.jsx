@@ -1,11 +1,11 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import AllTasks from "../components/AllTasks.jsx";
 import AuthContext from "../context/AuthContext.jsx";
 import { Link } from 'react-router-dom';
 import TaskContext from "../context/TaskContext.jsx";
 import AddTaskCard from "../components/AddTaskCard.jsx";
 import EditTaskCard from "../components/EditTaskCard.jsx";
-import {api} from "../api/base.js";
+import { api } from "../api/base.js";
 import Loading from "../components/Loading/Loading.jsx";
 
 const Home = () => {
@@ -13,9 +13,10 @@ const Home = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
     const [tasks, setTasks] = useState([]);
-    const [selectedTask, setSelectedTask] = useState({})
-
-    const [loading, setLoading] = useState(false)
+    const [filteredTasks, setFilteredTasks] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [selectedTask, setSelectedTask] = useState({});
+    const [loading, setLoading] = useState(false);
 
     const handleOpen = () => {
         setIsOpen(true);
@@ -28,25 +29,34 @@ const Home = () => {
     useEffect(() => {
         const fetchAllTasks = async () => {
             try {
-                setLoading(true)
+                setLoading(true);
                 const res = await api.get('/task/all');
-                console.log(res.data)
-                setTasks(res.data.tasks)
+                setTasks(res.data.tasks);
+                setFilteredTasks(res.data.tasks);
             } catch (e) {
                 console.log(e);
-            }finally {
-                setLoading(false)
+            } finally {
+                setLoading(false);
             }
         };
         fetchAllTasks();
     }, []);
 
-
+    useEffect(() => {
+        if (searchQuery === "") {
+            setFilteredTasks(tasks);
+        } else {
+            const filtered = tasks.filter(task =>
+                task.title.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+            setFilteredTasks(filtered);
+        }
+    }, [searchQuery, tasks]);
 
     return (
         <div className="h-screen flex justify-center">
             {user ? (
-                <TaskContext.Provider value={{ isOpen, setIsOpen, editOpen, setEditOpen,tasks,setTasks, selectedTask, setSelectedTask }}>
+                <TaskContext.Provider value={{ isOpen, setIsOpen, editOpen, setEditOpen, tasks, setTasks, selectedTask, setSelectedTask }}>
                     <div className="">
                         {isOpen && (
                             <>
@@ -60,18 +70,33 @@ const Home = () => {
                             </>
                         )}
                         {editOpen && (
-                                <>
-                                    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-[500]"></div>
-                                    <div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] z-[999]">
-                                        <EditTaskCard {...selectedTask}/>
-                                    </div>
-                                </>
+                            <>
+                                <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-[500]"></div>
+                                <div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] z-[999]">
+                                    <EditTaskCard {...selectedTask} />
+                                </div>
+                            </>
                         )}
                         {loading ? (
                             <div className="h-screen w-screen flex items-center justify-center">
                                 <Loading />
                             </div>
-                        ) : <AllTasks />}
+                        ) : (
+                            <>
+                                <div className="flex justify-center my-4">
+                                    <input
+                                        type="text"
+                                        placeholder="Search tasks by title..."
+                                        className="p-2 border rounded-md w-96"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value) }
+                                    />
+                                </div>
+
+                                {/* Pass filteredTasks instead of tasks */}
+                                <AllTasks tasks={filteredTasks} />
+                            </>
+                        )}
 
                         <div className="fixed right-24 bottom-16 z-50">
                             <button
@@ -83,8 +108,6 @@ const Home = () => {
                         </div>
                     </div>
                 </TaskContext.Provider>
-
-
             ) : (
                 <div className="mt-52 text-center space-y-6">
                     <h2 className="text-3xl font-semibold">Welcome to Kaushalam</h2>

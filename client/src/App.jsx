@@ -20,7 +20,6 @@ function App() {
 
 
 
-
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -28,7 +27,6 @@ function App() {
                     withCredentials: true
                 });
                 setUser(res.data.user);
-                console.log(user)
             } catch (error) {
                 console.log("Error fetching user data:", error);
             } finally {

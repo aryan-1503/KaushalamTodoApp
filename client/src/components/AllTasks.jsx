@@ -2,8 +2,7 @@ import React, { useContext } from 'react';
 import TaskCard from './TaskCard.jsx';
 import TaskContext from "../context/TaskContext.jsx";
 
-const AllTasks = () => {
-    const { tasks } = useContext(TaskContext);
+const AllTasks = ({ tasks }) => {
 
     return (
         <>

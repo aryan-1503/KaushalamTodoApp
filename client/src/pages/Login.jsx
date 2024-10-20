@@ -3,7 +3,6 @@ import {Link, useNavigate} from 'react-router-dom';
 import {api} from "../api/base.js";
 import {ToastContainer,toast} from "react-toastify";
 import AuthContext from "../context/AuthContext.jsx";
-import axios from "axios"; // Assuming you're using React Router
 
 const Login = () => {
     const { setUser } = useContext(AuthContext)
