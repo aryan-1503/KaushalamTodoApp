@@ -11,7 +11,7 @@ const EditTaskCard = ({ id, title, endDate, status, priority }) => {
         title: title || "",
         priority: priority || "medium",
         dueDate: "",
-        status: status === 'completed', // Set true if the task is completed
+        status: status === 'completed',
     });
 
     // Set the dueDate from props if it exists
@@ -105,7 +105,7 @@ const EditTaskCard = ({ id, title, endDate, status, priority }) => {
                             type="checkbox"
                             name="status"
                             onChange={handleChange}
-                            checked={formData.status === 'completed'} // Checkbox reflects completed status
+                            checked={status}
                             className="w-5 h-5"
                         />
                         <label htmlFor="status" className="text-lg font-semibold">
