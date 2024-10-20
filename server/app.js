@@ -2,7 +2,7 @@ import express, {urlencoded} from "express"
 import "dotenv/config"
 import cors from "cors"
 import cookieParser from "cookie-parser";
-import { connectToDB } from "./utils/connectToDB.js";
+import { connectToDb } from "./utils/connectToDb.js";
 import {authRouter} from "./routers/auth.route.js";
 import {taskRouter} from "./routers/task.route.js";
 
@@ -10,7 +10,7 @@ console.log("KAUSHALAM TODO APP")
 
 const app = express();
 
-connectToDB()
+connectToDb()
 
 // ENV variables
 const PORT = process.env.PORT
