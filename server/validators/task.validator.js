@@ -12,7 +12,7 @@ const updateTaskSchema = Joi.object({
     title: Joi.string().min(3).optional(),
     dueDate: Joi.date().optional(),
     priority: Joi.string().valid('low', 'medium', 'high').required(),
-    status: Joi.string().valid('pending', 'in-progress', 'completed').optional() // Assuming task has a status field
+    status: Joi.string().valid('pending', 'completed').optional()
 });
 
 // Update Task Status validation schema

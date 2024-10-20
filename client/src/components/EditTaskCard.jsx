@@ -1,5 +1,4 @@
 import { useContext, useState, useEffect } from 'react';
-import axios from 'axios';
 import TaskContext from '../context/TaskContext.jsx';
 import { api } from "../api/base.js";
 import { toast, ToastContainer } from "react-toastify";
@@ -11,7 +10,7 @@ const EditTaskCard = ({ id, title, endDate, status, priority }) => {
         title: title || "",
         priority: priority || "medium",
         dueDate: "",
-        status: status === 'completed',
+        status: status || 'pending',  // Default to 'pending'
     });
 
     // Set the dueDate from props if it exists
@@ -26,24 +25,30 @@ const EditTaskCard = ({ id, title, endDate, status, priority }) => {
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setFormData({
-            ...formData,
-            [name]: type === 'checkbox' ? (checked ? 'completed' : 'pending') : value,
-        });
+
+        if (type === 'checkbox') {
+            setFormData({
+                ...formData,
+                status: checked ? 'completed' : 'pending', // Set status based on checkbox
+            });
+        } else {
+            setFormData({
+                ...formData,
+                [name]: value,
+            });
+        }
     };
 
     const handleEdit = async (e) => {
         e.preventDefault();
-        console.log(formData);
         try {
             const res = await api.put(`/task/${id}`, formData);
             setTimeout(() => {
                 toast.success(res.data.message, {
                     position: "top-right"
-                })
-            }, 2000)
+                });
+            }, 2000);
             window.location.reload();
-
         } catch (error) {
             console.log(error);
         } finally {
@@ -105,7 +110,7 @@ const EditTaskCard = ({ id, title, endDate, status, priority }) => {
                             type="checkbox"
                             name="status"
                             onChange={handleChange}
-                            checked={status}
+                            checked={formData.status === 'completed'}  // Bind to formData.status
                             className="w-5 h-5"
                         />
                         <label htmlFor="status" className="text-lg font-semibold">
