@@ -24,26 +24,35 @@ const transporter = nodemailer.createTransport({
 });
 
 const login = async (req,res) => {
+    /*
+        Function to login a user
+        Request Body : Email, Password
+        Returns : User, TOKEN
+    */
     const { email, password } = req.body;
     try{
+        // Checking if the user exists
         const user = await UserModel.findOne({ email });
         if(!user){
-            // console.log("user not found")
             return res.status(404).json({ message: "User not found! Register first" });
         }
 
+        // Checking if the user is verified if not then we will delete the user
         if (!user.isVerified){
-            await axios.delete(`http://localhost:4000/api/auth/delete-user/${user._id}`,{
+            await axios.delete(`https://kaushalamtodoapp.onrender.com/api/auth/delete-user/${user._id}`,{
                 withCredentials: true
             })
             return res.status(401).json({ message: "Email not verified!" })
         }
 
+        // Checking if the password is correct
         const isPasswordMatch = await bcrypt.compare(password,user.password);
         if (!isPasswordMatch){
             console.log("password incorrect")
             return res.status(400).json({ message: "Password incorrect" });
         }
+
+        // Creating a Token
         let token;
         try{
             token = jwt.sign({id: user._id}, process.env.SECRET, { expiresIn: '30d' });
@@ -51,6 +60,8 @@ const login = async (req,res) => {
             console.log("JWT sign error:", err);
             return res.status(500).json({ message: "Error generating authentication token." });
         }
+
+        // Setting the token to cookies
         res.cookie('token', token,{
             httpOnly: true,
             secure: true,
@@ -64,12 +75,21 @@ const login = async (req,res) => {
 }
 
 const register = async (req, res) => {
+    /*
+        Function to Register a user and save userData into Database
+        Request Body : Username, Email, Password
+        Returns : savedUser
+    */
+
     const { username, email, password } = req.body;
     try{
+        //  Checking if the user exists
         const userExists = await UserModel.findOne({ email });
         if (userExists){
             return res.status(400).json({message: "User Already Exists"})
         }
+
+        // Generating Verification Code
         const verificationCode = Math.floor(1000 + Math.random() * 9000).toString();
         const mailOptions = {
             from: userMail,
@@ -77,7 +97,7 @@ const register = async (req, res) => {
             subject: `Kaushalam Verification Code`,
             text: `Welcome to Kaushalam! 🌟 Verify your email . Your verification code is: ${verificationCode}. Enjoy the journey! 📸✨`,
         };
-
+        // Sending the verification via mail
         await transporter.sendMail(mailOptions);
         const newUser = new UserModel({ username,email,password,verificationCode});
         const savedUser = await newUser.save();
@@ -92,6 +112,8 @@ const register = async (req, res) => {
 }
 
 const logout = (req,res) => {
+
+    // Clearing the cookies to logout
     res.clearCookie('token',{
         httpOnly: true,
         secure: true,
@@ -101,13 +123,18 @@ const logout = (req,res) => {
 }
 
 const verify = async (req, res) => {
+    /*
+        Function to Verify a user and save userData into Database
+        Request Body : Username, Email, Password
+        Returns : savedUser
+    */
+
     const {email,verificationCode} = req.body;
     try{
         const user = await UserModel.findOne({ email });
         if(!user) {
             return res.status(404).json({ message: "User not found" });
         }
-
         if(user.verificationCode === verificationCode){
             user.isVerified = true;
             user.verificationCode = "";
@@ -152,6 +179,11 @@ const me = async (req, res) => {
 
 
 const deleteUser = async (req,res) => {
+    /*
+        Function to Delete a user
+        Request Params : user id
+        Returns : delete the user
+    */
     const { id } = req.params;
     try{
         await UserModel.findByIdAndDelete(id);

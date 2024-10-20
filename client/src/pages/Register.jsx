@@ -3,7 +3,8 @@ import {Link, useNavigate} from 'react-router-dom';
 import axios from "axios";
 import {toast} from "react-toastify";
 import AuthContext from "../context/AuthContext.jsx";
-import {api} from "../api/base.js"; // Assuming you're using React Router
+import {api} from "../api/base.js";
+import Loading from "../components/Loading/Loading.jsx"; // Assuming you're using React Router
 
 const Register = () => {
     const navigate = useNavigate();
@@ -107,7 +108,7 @@ const Register = () => {
                         className="w-full p-2 mb-4 border border-black rounded focus:outline-none focus:ring focus:ring-gray-800"
                     />
                     <button type="submit" className="w-full p-3 bg-black text-white rounded hover:bg-gray-800 transition duration-300">
-                        Register
+                        { loading ? <Loading /> : "Register"}
                     </button>
                 </form>
 

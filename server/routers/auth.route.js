@@ -6,6 +6,8 @@ import { validateAuthRequest } from "../middlewares/validation.middleware.js";
 import { deleteUserSchema, loginSchema, registerSchema, verifySchema } from "../validators/user.validator.js";
 const authRouter = Router();
 
+
+// Request Handlers for Authentication along with validation validation
 authRouter
     .post("/register", validateAuthRequest(registerSchema), register)
     .post("/login", validateAuthRequest(loginSchema), login)

@@ -3,6 +3,11 @@ import {UserModel} from "../models/user.model.js";
 
 
 const createTask = async (req,res) => {
+    /*
+        Function to Create a newTask and save it into Database
+        Request Body :  title, priority, dueDate
+        Returns : savedTask
+    */
     const { title, priority, dueDate } = req.body;
     try{
         const task = await TaskModel.findOne({ title });
@@ -26,6 +31,10 @@ const createTask = async (req,res) => {
 }
 
 const getAllUserTask = async (req,res) => {
+    /*
+        Function to fetch all the task of the logged-in user
+        Returns : user's task
+    */
     try{
         const userId = req.user._id;
         const user = await UserModel.findById(userId).populate("tasks");
@@ -37,6 +46,11 @@ const getAllUserTask = async (req,res) => {
 }
 
 const getSingleTask = async (req,res) => {
+    /*
+        Function to fetch single task by Id
+        Request Params : task id
+        Returns : a single task
+    */
     const { id } = req.params;
     try{
         const task = await TaskModel.findById(id);
@@ -50,6 +64,12 @@ const getSingleTask = async (req,res) => {
 }
 
 const updateTask = async (req,res) => {
+    /*
+        Function to Update a task
+        Request Params : task id
+        Request Body :  title, priority, dueDate, status
+        Returns : updatedTask
+    */
     const { id } = req.params;
     try{
         const task = await TaskModel.findByIdAndUpdate(id,{...req.body},{ new: true });
@@ -60,6 +80,12 @@ const updateTask = async (req,res) => {
 }
 
 const updateStatus =  async (req,res) => {
+    /*
+        Function to update the status of the  task
+        Request params : task id
+        Request Body : status
+        Returns : savedTask
+    */
     const {
         body,
         params: { id }
@@ -73,6 +99,11 @@ const updateStatus =  async (req,res) => {
 }
 
 const deleteTask = async (req,res) => {
+    /*
+        Function to delete a task
+        Request params : task id
+        Returns : deletes the task
+    */
     const {
         params: { id }
     } = req

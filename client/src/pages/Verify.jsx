@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Loading from "../components/Loading/Loading.jsx";
 import AuthContext from "../context/AuthContext.jsx";
@@ -10,39 +10,38 @@ const Verify = () => {
     const [verificationCode, setVerificationCode] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const {tempUser,setUser} = useContext(AuthContext)
+    const { tempUser, setUser } = useContext(AuthContext);
 
-    console.log("TEMP USER : ", tempUser)
+    console.log("TEMP USER : ", tempUser);
 
     const handleChange = (e) => {
         setVerificationCode(e.target.value);
     }
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             setLoading(true);
-            const res = await api.post("/auth/verify", { email: tempUser.email,verificationCode: verificationCode });
+            const res = await api.post("/auth/verify", { email: tempUser.email, verificationCode });
             toast.success(res.data.message, {
                 position: "top-right",
             });
-            setUser(res.data.user)
+            setUser(res.data.user);
             navigate("/");
         } catch (error) {
             if (error.response && error.response.data && error.response.data.message) {
-                toast.error(error.response.data.message,{
+                toast.error(error.response.data.message, {
                     position: "top-center"
-                })
-                if(error.response.data.message === "Verification Failed"){
-                    navigate("/")
+                });
+                if (error.response.data.message === "Verification Failed") {
+                    navigate("/");
                 }
             } else {
-                const response = await api.delete(`/auth/delete-user/${tempUser._id}`)
-                toast.error(`An unexpected error occurred. ${response.data.message}`,{
+                const response = await api.delete(`/auth/delete-user/${tempUser._id}`);
+                toast.error(`An unexpected error occurred. ${response.data.message}`, {
                     position: "top-center"
-                })
-                console.log(error)
+                });
+                console.log(error);
             }
             console.log(error.message);
         } finally {
@@ -51,31 +50,31 @@ const Verify = () => {
     }
 
     return (
-        <div className="w-screen h-screen bg-yellow-50 flex justify-center items-center shadow]">
-            <div className="wrapper flex flex-col justify-center items-center bg-[#2f1a1a] w-[22%] h-auto p-4 rounded-[0.5rem] shadow mxs:w-[270px] msm:w-[330px] mmd:w-[340px] mlg:w-[350px]">
-                <div className="flex justify-center flex-col items-center text-[35px] gap-4 text-amber-100 mb-3">
-                    Verify Email
+        <div className="w-screen h-screen flex justify-center items-center">
+            <div className="p-8 flex flex-col justify-center items-center w-[90%] sm:w-[400px] h-auto rounded-lg shadow-lg bg-white">
+                <h1 className="text-3xl font-semibold text-gray-800 mb-4">Verify Your Email</h1>
+                <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4 w-full">
+                    <input
+                        type="text"
+                        name="verificationCode"
+                        placeholder="Enter Verification Code"
+                        onChange={handleChange}
+                        required
+                        className="h-[2.5rem] w-full rounded-lg border-2 border-gray-300 focus:border-amber-500 focus:outline-none px-4"
+                    />
+                    <button
+                        type="submit"
+                        className="w-full h-[2.5rem] rounded-lg bg-black text-white font-bold text-lg transition-transform duration-300 hover:scale-105 active:scale-95 flex items-center justify-center"
+                    >
+                        {loading ? <Loading /> : "Verify"}
+                    </button>
+                </form>
+                <div className="mt-3 text-gray-700 text-center">
+                    <p className="text-lg">Didn't receive a code?
+                        <Link to="/resend-code" className="pl-1 font-semibold">Resend</Link>
+                    </p>
                 </div>
-                <div className="form-container">
-                    <form onSubmit={handleSubmit} className="flex justify-center flex-col items-center gap-4">
-                        <input
-                            type="text"
-                            name="verificationCode"
-                            placeholder="Verification Code"
-                            onChange={handleChange}
-                            required
-                            className="h-[2.5rem] w-[120%] rounded pl-[0.6rem] border-2 border-amber-950 font-[500] text-[17px] mxs:w-[105%]"
-                        />
-                        <button type="submit" className="w-[120%] h-[2.5rem] rounded bg-amber-100 text-[#2f1a1a] font-bold text-[20px] active:scale-[0.98] mxs:w-[105%]">
-                            {loading ? <div style={{ display: "grid", placeItems: "center" }}><Loading /></div> : "Verify"}
-                        </button>
-                        <ToastContainer />
-                    </form>
-                    <div className="mt-3 text-[#dedcdc] flex justify-center p-[1rem 0 0.5rem 0] text-[20px]">
-                        Didn't receive a code?
-                        <Link to="/resend-code" className="pl-[0.5rem] text-amber-100">Resend</Link>
-                    </div>
-                </div>
+                <ToastContainer />
             </div>
         </div>
     );

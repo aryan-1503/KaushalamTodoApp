@@ -7,11 +7,11 @@ import {validateTaskRequest} from "../middlewares/validation.middleware.js";
 const taskRouter = Router();
 
 taskRouter
-    .post("/create", getUser, validateTaskRequest(createTaskSchema), createTask)  // Apply validation for task creation
+    .post("/create", getUser, validateTaskRequest(createTaskSchema), createTask)
     .get("/all", getUser, getAllUserTask)
-    .get("/:id", validateTaskRequest(taskIdSchema, 'params'), getSingleTask)  // Validate task id in params
-    .put("/:id", validateTaskRequest(taskIdSchema, 'params'), validateTaskRequest(updateTaskSchema), updateTask)  // Validate task id and body
-    .patch("/status/:id", validateTaskRequest(taskIdSchema, 'params'), validateTaskRequest(updateStatusSchema), updateStatus)  // Validate task id and status
-    .delete("/:id", validateTaskRequest(taskIdSchema, 'params'), deleteTask)  // Validate task id for deletion
+    .get("/:id", validateTaskRequest(taskIdSchema, 'params'), getSingleTask)
+    .put("/:id", validateTaskRequest(taskIdSchema, 'params'), validateTaskRequest(updateTaskSchema), updateTask)
+    .patch("/status/:id", validateTaskRequest(taskIdSchema, 'params'), validateTaskRequest(updateStatusSchema), updateStatus)
+    .delete("/:id", validateTaskRequest(taskIdSchema, 'params'), deleteTask)
 
 export { taskRouter };

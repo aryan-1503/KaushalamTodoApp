@@ -1,4 +1,8 @@
 const validateAuthRequest = (schema) => {
+    /*
+        Function to validate the authentication routes
+        Returns : error , if any
+    */
     return (req, res, next) => {
         const { error } = schema.validate(req.body);
         if (error) {
@@ -9,6 +13,10 @@ const validateAuthRequest = (schema) => {
 };
 
 const validateTaskRequest = (schema, property = 'body') => {
+    /*
+        Function to validate the task routes
+        Returns : error if any
+    */
     return (req, res, next) => {
         const { error } = schema.validate(req[property]);
         if (error) {
